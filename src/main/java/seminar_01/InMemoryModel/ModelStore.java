@@ -13,10 +13,10 @@ public class ModelStore implements IModelChanger{
     public List<Scene> Scenes;
     public List<Flash> Flashes;
     public List<Camera> Cameras;
-    private List<IModelChangeObserver> changedObserver;
+    private List<IModelChangeObserver> changedObservers;
 
     public ModelStore(List<IModelChangeObserver> changedObserver) throws Exception {
-        this.changedObserver = changedObserver;
+        this.changedObservers = changedObserver;
         this.Models = new ArrayList<>();
         this.Scenes = new ArrayList<>();
         this.Flashes = new ArrayList<>();
@@ -25,10 +25,14 @@ public class ModelStore implements IModelChanger{
         Models.add(new PoligonalModel(null));
         Flashes.add(new Flash());
         Cameras.add(new Camera());
-        Scenes.add(new Scene(0, Models, Flashes));
+        Scenes.add(new Scene(0, Models, Flashes, Cameras));
     }
 
-    public Scene getScene() {
+    public Scene getScene(int id) {
+        for (int i = 0; i < Scenes.size(); i++) {
+            if (Scenes.get(i).Id == id)
+                return Scenes.get(i);
+        }
         return null;
     }
 
