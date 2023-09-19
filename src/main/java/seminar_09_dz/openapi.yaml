@@ -1,0 +1,193 @@
+openapi: 3.0.0
+info:
+  title: Заказ ресурсов в облаке
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local Server
+paths: 
+  /clouds:
+    get: 
+      summary: Получение спискоа ресурсов на облако
+      tags:
+        - clouds
+      operationId: getAllClouds
+      responses:
+        "200":
+          description: Успешный ответ
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/clouds"
+        "default":
+          description: Все остальное
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    
+    post:
+      summary: Создать заказ
+      tags:
+        - clouds
+      operationId: createOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/cloud"
+      responses:
+        "200":
+          description: Успешный ответ
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cloud"
+        "default":
+          description: Все остальное
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"  
+                
+  /clouds/{cloud_id}:
+    get:
+      summary: Получение облака по id
+      tags:
+         - clouds
+      operationId: getCloudById
+      parameters:
+        - in: path
+          name: cloud_id
+          schema:
+            type: string
+          example: jhsfgkjhoi123hjkj
+          required: true
+          description: ID облака
+      responses:
+        "200":
+          description: Успешный ответ
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cloud"
+        "400":
+          description: Нет id
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "default":
+          description: Все остальное
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+                
+    delete:
+      summary: Удаление облака по id
+      tags:
+         - clouds
+      operationId: deleteCloudById
+      parameters:
+        - in: path
+          name: cloud_id
+          schema:
+            type: string
+          example: jhsfgkjhoi123hjkj
+          required: true
+          description: ID облака
+      responses:
+        "200":
+          description: Облако удалено
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cloud"
+        "400":
+          description: Облако не найдено
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "default":
+          description: Все остальное
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+                
+    put:
+      summary: Изменение параметров облака по id
+      tags:
+         - clouds
+      operationId: updateCloudById
+      parameters:
+        - in: path
+          name: cloud_id
+          schema:
+            type: string
+          example: jhsfgkjhoi123hjkj
+          required: true
+          description: ID облака
+      responses:
+        "200":
+          description: Облако удалено
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/cloud"
+        "400":
+          description: Облако не найдено
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "default":
+          description: Все остальное
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+                
+components:
+  schemas:
+    cloud:
+      type: object
+      required: 
+        - os
+        - cpu
+        - client_id
+      properties:
+        os:
+          type: string
+          enum: 
+            - Windows
+            - Linux
+          description: Операционная система
+        ram:
+          type: string
+          example: 256
+          description: Количество оперативной памяти
+        cpu:
+          type: string
+          example: 8
+          description: Количество ядер процессора
+        client_id:
+          type: string
+          example: jhg876kjsad5650-980324jkh
+    clouds:
+      type: array
+      items:
+        $ref: "#/components/schemas/clouds"
+    error:
+      type: object
+      required:
+      - error_code
+      - error_message
+      properties:
+        error_code:
+          type: integer
+        error_message:
+          type: string
+      
