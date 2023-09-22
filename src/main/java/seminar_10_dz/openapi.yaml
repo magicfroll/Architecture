@@ -1,0 +1,273 @@
+openapi: 3.0.0
+info:
+  title: Робот пылесос
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local Server
+paths: 
+  /robots:
+    get: 
+      summary: Метод получения списка роботов
+      tags:
+        - Robots
+      operationId: getAllRobots
+      responses:
+        "200":
+          description: Успешный ответ
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/robots"
+        "default":
+          description: Все остальное
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    
+    post:
+      summary: Метод создания робота
+      tags:
+        - Robots
+      operationId: createRobot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/robot"
+      responses:
+        "200":
+          description: Успешный ответ
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/robot"
+        "default":
+          description: Все остальное
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"  
+                
+  /robots/{robot_id}:
+    get:
+      summary: Получение робота по id
+      tags:
+         - Robots
+      operationId: getRobotById
+      parameters:
+        - in: path
+          name: robot_id
+          schema:
+            type: string
+          example: jhsfgkjhoi123hjkj
+          required: true
+          description: ID робота
+      responses:
+        "200":
+          description: Успешный ответ
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/robot"
+        "400":
+          description: Робот не найден
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "default":
+          description: Все остальное
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+                
+    delete:
+      summary: Удаление робота по id
+      tags:
+         - Robots
+      operationId: deleteRobotById
+      parameters:
+        - in: path
+          name: robot_id
+          schema:
+            type: string
+          example: jhsfgkjhoi123hjkj
+          required: true
+          description: ID робота
+      responses:
+        "200":
+          description: Робот удален
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/robot"
+        "400":
+          description: Робот не найден
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "default":
+          description: Все остальное
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+                
+    put:
+      summary: Изменение параметров робота по id
+      tags:
+         - Robots
+      operationId: updateRobotById
+      parameters:
+        - in: path
+          name: robot_id
+          schema:
+            type: string
+          example: jhsfgkjhoi123hjkj
+          required: true
+          description: ID робота
+      responses:
+        "200":
+          description: Параметры робота изменены
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/robot"
+        "400":
+          description: Робат не найден
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "default":
+          description: Все остальное
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+                
+  /users:
+    get:
+      summary: Метод получения списка пользователей
+      tags:
+       - Users
+      operationId: getAllUsers
+      responses:
+        "200":
+          description: Успешный ответ
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/users"
+        "default":
+          description: Все остальное
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+                
+    post:
+      summary: Метод создания пользователя
+      tags:
+        - Users
+      operationId: createUser
+      requestBody: 
+        required: true
+        content:
+          application/json:
+                schema:
+                  $ref: "#/components/schemas/user"
+      responses:
+          "200":
+            description: Пользователь создан
+            content: 
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/user"
+          "default":
+            description: Все остальное
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/error"
+     
+                
+components:
+  schemas:
+    robot:
+      type: object
+      required: 
+        - model
+        - description
+        - serialNumber
+      properties:
+        model:
+          type: string
+          example: A356
+          description: Модель робота
+        description:
+          type: string
+          example: Хороший пылесос
+          description: Описание пылесоса
+        serialNumber:
+          type: string
+          example: kljfh87623kjh9
+          description: Серийный номер робота
+        
+    robots:
+      type: array
+      items:
+        $ref: "#/components/schemas/robot"
+        
+    user:
+      type: object
+      required: 
+        - name
+        - password
+        - email
+      properties:
+        name:
+         type: string
+         example: Джон
+         description: Имя пользователя
+        password:
+          type: string
+          example: jkhgds9f87y
+          description: Пароль пользователя
+        email:
+          type: string
+          example: example@example.com
+          description: Почта пользователя
+    
+    users:
+      type: array
+      items:
+        required: 
+        - name
+        - email
+        properties:
+          name:
+           type: string
+           example: Джон
+           description: Имя пользователя
+          email:
+            type: string
+            example: example@example.com
+            description: Почта пользователя
+    
+    error:
+      type: object
+      required:
+      - error_code
+      - error_message
+      properties:
+        error_code:
+          type: integer
+        error_message:
+          type: string
+      
